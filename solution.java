@@ -11,10 +11,6 @@ class Solution {
         int[] maxLeft = new int[n];
         // max of left is going to be at 0 index, since middle has to start at index 1 
         maxLeft[0] = 0;
-        // [max i+1... n-1]
-        int[] maxRight = new int[n];
-        // max of right is going to be middle - 1
-        maxRight[n - 1] = 0;
 
         // From second element to the end
         for (int i = 1; i < n; i++) {
@@ -22,19 +18,15 @@ class Solution {
         }
         System.out.println("maxLeft: " + java.util.Arrays.toString(maxLeft));
 
-        for (int i = n - 2; i >= 0; i--) {
-            maxRight[i] = Math.max(maxRight[i + 1], nums[i + 1]);
-        }
-        System.out.println("maxRight: " + java.util.Arrays.toString(maxRight));
         // From all possible middle indicies
         for (int j = 1; j < n  - 1; j++) {
             // For current idex j, maxLeft[j] is max of nums[i] for i < j
-            // maxRight[j] holds max of nums[k] where j < k
-            // Then calculates value of triplet throuh i - j * k
-            long currentValue = (long) ((maxLeft[j] - nums[j]) * maxRight[j]);
-
-            // If current value is greater than max, update
-            maxVal = Math.max(maxVal, currentValue);
+            for (int k = j + 1; k < n; k++) {
+                // Iterate through all possible right indicies so j < k
+                long currentValue = (long) (maxLeft[j] - nums[j]) * nums[k];
+                // If current value is greater than max, update
+                maxVal = Math.max(maxVal, currentValue);
+            }
         }
         // Retun maximum triplet value found
         return maxVal;
